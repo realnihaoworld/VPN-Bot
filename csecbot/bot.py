@@ -5,6 +5,11 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
 from dotenv import dotenv_values
 from io import BytesIO
+
+import codecs
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+from cryptography.hazmat.primitives import serialization
+
 config = dotenv_values(".env")
 
 TOKEN = config["DISCORD_TOKEN"]
@@ -38,21 +43,34 @@ def run_discord_bot():
 
     @client.tree.command(name="generate")
     async def generate(interaction: discord.Interaction):
-        key = rsa.generate_private_key(
-            backend=crypto_default_backend(),
-            public_exponent=65537,
-            key_size=2048
-            )
+        # key = rsa.generate_private_key(
+        #     backend=crypto_default_backend(),
+        #     public_exponent=65537,
+        #     key_size=2048
+        #     )
         
-        public_key = key.public_key().public_bytes(
-            crypto_serialization.Encoding.OpenSSH,
-            crypto_serialization.PublicFormat.OpenSSH
-            )
+        # public_key = key.public_key().public_bytes(
+        #     crypto_serialization.Encoding.OpenSSH,
+        #     crypto_serialization.PublicFormat.OpenSSH
+        #     )
         
-        public_key_file = BytesIO(public_key)
+        # generate private key
+        private_key = X25519PrivateKey.generate()
+        bytes_ = private_key.private_bytes(  
+            encoding=serialization.Encoding.Raw,  
+            format=serialization.PrivateFormat.Raw,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        print(codecs.encode(bytes_, 'base64').decode('utf8').strip())
+ 
+        # derive public key
+        pubkey = private_key.public_key().public_bytes(encoding=serialization.Encoding.Raw, format=serialization.PublicFormat.Raw)
+        print(codecs.encode(pubkey, 'base64').decode('utf8').strip())
+        
+        public_key_file = BytesIO(pubkey)
         public_key_discord_file = discord.File(fp=public_key_file, filename="id_rsa.pub")
         await interaction.response.send_message(
-            content=f"Here is your RSA-256 Public Key!",
+            content=f"Here is your X25519 Public Key!",
             ephemeral=True,
             file=public_key_discord_file
             )
