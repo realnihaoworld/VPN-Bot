@@ -53,13 +53,21 @@ def run_discord_bot():
             encryption_algorithm=serialization.NoEncryption()
         )
         print(codecs.encode(bytes_, 'base64').decode('utf8').strip())
- 
+
         # derive public key
         pubkey = private_key.public_key().public_bytes(encoding=serialization.Encoding.Raw, format=serialization.PublicFormat.Raw)
         print(codecs.encode(pubkey, 'base64').decode('utf8').strip())
         
+        config = configparser.ConfigParser()
+        config['Interface'] = {'PrivateKey': codecs.encode(bytes_, 'base64').decode('utf8').strip(),
+                               'Address': '10.20.1.x/24'}
+        config['Peer'] = {'PublicKey': codecs.encode(pubkey, 'base64').decode('utf8').strip(),
+                          'AllowedIPs': 'temp',
+                          'Endpoint': 'temp'}
+        
+
         public_key_file = BytesIO(pubkey)
-        public_key_discord_file = discord.File(fp=public_key_file, filename="id_rsa.pub")
+        public_key_discord_file = discord.File(fp=public_key_file, filename="test.conf")
         await interaction.response.send_message(
             content=f"Here is your X25519 Public Key!",
             ephemeral=True,
