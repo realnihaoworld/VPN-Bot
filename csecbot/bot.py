@@ -10,11 +10,15 @@ import codecs
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
-import configparser
+from configparser import ConfigParser
+
+import ipaddress
 
 config = dotenv_values(".env")
 
 TOKEN = config["DISCORD_TOKEN"]
+
+
 
 async def send_message(message, user_message):
     try:
@@ -58,18 +62,24 @@ def run_discord_bot():
         pubkey = private_key.public_key().public_bytes(encoding=serialization.Encoding.Raw, format=serialization.PublicFormat.Raw)
         print(codecs.encode(pubkey, 'base64').decode('utf8').strip())
         
-        config = configparser.ConfigParser()
-        config['Interface'] = {'PrivateKey': codecs.encode(bytes_, 'base64').decode('utf8').strip(),
-                               'Address': '10.20.1.x/24'}
-        config['Peer'] = {'PublicKey': codecs.encode(pubkey, 'base64').decode('utf8').strip(),
-                          'AllowedIPs': 'temp',
-                          'Endpoint': 'temp'}
-        
+        config = ConfigParser()
+        config['Interface'] = {
+            'PrivateKey': codecs.encode(bytes_, 'base64').decode('utf8').strip(),
+            'Address': 'temp'
+        }
+        config['Peer'] = {
+        'PublicKey': codecs.encode(pubkey, 'base64').decode('utf8').strip(),
+        'AllowedIPs': 'temp',
+        'Endpoint': 'temp'
+        }
 
-        public_key_file = BytesIO(pubkey)
+        with open('config.ini', 'w') as conf:
+            config.write(conf)
+
+        public_key_file = BytesIO(config)
         public_key_discord_file = discord.File(fp=public_key_file, filename="test.conf")
         await interaction.response.send_message(
-            content=f"Here is your X25519 Public Key!",
+            content=f"Here is your Config File!",
             ephemeral=True,
             file=public_key_discord_file
             )
