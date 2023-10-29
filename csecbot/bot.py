@@ -10,6 +10,8 @@ import codecs
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
+import configparser
+
 config = dotenv_values(".env")
 
 TOKEN = config["DISCORD_TOKEN"]
@@ -43,17 +45,6 @@ def run_discord_bot():
 
     @client.tree.command(name="generate")
     async def generate(interaction: discord.Interaction):
-        # key = rsa.generate_private_key(
-        #     backend=crypto_default_backend(),
-        #     public_exponent=65537,
-        #     key_size=2048
-        #     )
-        
-        # public_key = key.public_key().public_bytes(
-        #     crypto_serialization.Encoding.OpenSSH,
-        #     crypto_serialization.PublicFormat.OpenSSH
-        #     )
-        
         # generate private key
         private_key = X25519PrivateKey.generate()
         bytes_ = private_key.private_bytes(  
