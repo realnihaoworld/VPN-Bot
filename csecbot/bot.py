@@ -84,23 +84,4 @@ def run_discord_bot():
             file=public_key_discord_file
             )
     
-    
-    
-    # @client.event
-    # async def on_message(message):
-    #     # prevents the output of the bot from being used as an input
-    #     if message.author == client.user:
-    #         return
-
-    #     username = str(message.author)
-    #     user_message = str(message.content)
-    #     channel = str(message.channel)
-
-    #     # debugging
-    #     print(f"{username} said: '{user_message}' in {channel}")
-
-    #     if message.content:
-    #         await send_message(message, user_message)
-
-    
     client.run(TOKEN)
