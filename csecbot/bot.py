@@ -76,8 +76,8 @@ def run_discord_bot():
         with open('config.ini', 'w') as conf:
             config.write(conf)
 
-        public_key_file = BytesIO(config)
-        public_key_discord_file = discord.File(fp=public_key_file, filename="test.conf")
+        #public_key_file = BytesIO(config.ini)
+        public_key_discord_file = discord.File(fp='config.ini', filename="test.conf")
         await interaction.response.send_message(
             content=f"Here is your Config File!",
             ephemeral=True,
