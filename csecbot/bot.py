@@ -65,7 +65,8 @@ def run_discord_bot():
         config = ConfigParser()
         config['Interface'] = {
             'PrivateKey': codecs.encode(bytes_, 'base64').decode('utf8').strip(),
-            'Address': 'temp'
+            'Address': 'temp',
+            'DNS': '172.29.1.1'
         }
         config['Peer'] = {
         'PublicKey': codecs.encode(pubkey, 'base64').decode('utf8').strip(),
