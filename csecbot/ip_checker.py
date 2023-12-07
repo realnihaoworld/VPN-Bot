@@ -8,8 +8,13 @@ directory = '/Users/zheng/Documents/Github/discordbot/example_network/'
 
 def check_ip(directory, username, cidr_input):
     ip_dict = {}
-    #paramaterize this at some point
+    # generates the ip addresses and puts them in a list
     netIpv4Address = ipaddress.ip_network(cidr_input)
+    
+    ip_list = []
+    for i in netIpv4Address:
+        ip_list.append(i)
+    
     # splits the files by '_' and puts the ip into the value
     # and the user in the key
     for filename in os.listdir(directory):
@@ -26,15 +31,21 @@ def check_ip(directory, username, cidr_input):
         # This is if the user who is generating a config file 
         # does not have an ip already.
         # Generate ip addresses using ipaddress module
-        new_ip = "temp"
+        new_ip = ip_list[0]
         filename = f"{new_ip}_{username}"
         file = open("/Users/zheng/Documents/Github/discordbot/test_network/" + filename, 'w')
-        file.write("put config file info here")
+        file.write("put config file info here, this file creates a new ip")
         file.close()
+        ip_list.pop(0)
     
-    for i in netIpv4Address:
-        print(i)
+    print(ip_list)
+    
+    
+example_cidr = "172.31.0.0/16"
+test_cidr = "172.31.0.0/30"
 
-check_ip(directory, "user69", "172.31.0.0/16")
+#TODO bring ip_list out of the function
+check_ip(directory, "user69", test_cidr)
 
-#print(directory + 'test_user')
+check_ip(directory, "test", test_cidr)
+check_ip(directory, "yoooo", test_cidr)

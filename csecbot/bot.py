@@ -69,20 +69,20 @@ def run_discord_bot():
             'DNS': '172.29.1.1'
         }
         config['Peer'] = {
-        'PublicKey': codecs.encode(pubkey, 'base64').decode('utf8').strip(),
-        'AllowedIPs': 'temp',
-        'Endpoint': 'temp'
+            'PublicKey': codecs.encode(pubkey, 'base64').decode('utf8').strip(),
+            'AllowedIPs': 'temp',
+            'Endpoint': 'temp'
         }
 
         with open('config.ini', 'w') as conf:
             config.write(conf)
 
         #public_key_file = BytesIO(config.ini)
-        public_key_discord_file = discord.File(fp='config.ini', filename="test.conf")
+        config_file = discord.File(fp='config.ini', filename="test.conf")
         await interaction.response.send_message(
             content=f"Here is your Config File!",
             ephemeral=True,
-            file=public_key_discord_file
+            file=config_file
             )
     
     client.run(TOKEN)
