@@ -4,15 +4,13 @@ from cryptography.hazmat.primitives import serialization as crypto_serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.backends import default_backend as crypto_default_backend
 from dotenv import dotenv_values
-from io import BytesIO
+# from io import BytesIO
 
 import codecs
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
 from configparser import ConfigParser
-
-import ipaddress
 
 config = dotenv_values(".env")
 
